@@ -1,17 +1,19 @@
-# my_app
+# Moodify 🎵
 
-A new Flutter project.
+Moodify là một ứng dụng nghe nhạc được xây dựng bằng **Flutter**, lấy cảm hứng từ Spotify.  
+Ứng dụng cho phép bạn tận hưởng âm nhạc theo tâm trạng (mood) của mình với giao diện hiện đại và mượt mà.
 
-## Getting Started
+## 🚀 Tính năng chính
+- Phát nhạc trực tuyến với trải nghiệm giống Spotify.  
+- Tìm kiếm và quản lý playlist cá nhân.  
+- Gợi ý bài hát dựa trên tâm trạng.  
+- Hỗ trợ đa nền tảng (Android, iOS, Web, Desktop).  
 
-This project is a starting point for a Flutter application.
+## 📖 Bắt đầu
+Để chạy dự án trên máy của bạn:  
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-"Moodify" 
+```bash
+git clone https://github.com/khanh21s/Moodify.git
+cd Moodify
+flutter pub get
+flutter run
