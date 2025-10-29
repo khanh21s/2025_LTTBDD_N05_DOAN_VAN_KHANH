@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 
 class MusicItem {
   final String title;
@@ -31,20 +32,20 @@ List<MusicItem> playlists = [
   MusicItem(
     title: "Nhạc trẻ hot nhất",
     subtitle: "Danh sách phát • V-Pop",
-    imageUrl: "",
+    imageUrl: "assets/images/maxresdefault.jpg",
     audioUrl: "assets/audio/10 Mất 1 Còn Không (Td Remix).mp3"
   ),
   MusicItem(
     title: "Lofi Chill",
     subtitle: "Danh sách phát • Relax",
-    imageUrl: "https://i.scdn.co/image/ab67706f00000002f3c1a9e67d9f5158b6f2c9e6",
+    imageUrl: "assets/images/maxresdefault.jpg",
     audioUrl: "assets/audio/Để Anh Lương Thiện (Huy PT Remix).mp3"
 
   ),
   MusicItem(
     title: "Workout Playlist",
     subtitle: "Danh sách phát • EDM",
-    imageUrl: "https://i.scdn.co/image/ab67616d0000b2737b9e2d1e17a3e7c4c7d3d09f",
+    imageUrl: "assets/images/maxresdefault.jpg",
     audioUrl: "assets/audio/chẳng phải tình đầu sao đau đến thế.mp3"
   ),
 ];
@@ -332,7 +333,7 @@ MusicItem _hienThiTheoDanhMuc(String _selectedFilter, int index){
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const PlayerPage(),
+                          builder: (context) => PlayerPage(title: item.title, imageUrl: item.imageUrl, audioUrl: item.audioUrl,),
                         ),
                       );
                     },
@@ -390,16 +391,136 @@ class _SearchPagelibState extends State<SearchPagelib> {
 }
 
 
+
 class PlayerPage extends StatefulWidget {
-  const PlayerPage({super.key});
+  final String title;
+  final String imageUrl;
+  final String audioUrl;
+
+  const PlayerPage({
+    super.key,
+    required this.title,
+    required this.imageUrl,
+    required this.audioUrl,
+  });
 
   @override
   State<PlayerPage> createState() => _PlayerPageState();
 }
 
 class _PlayerPageState extends State<PlayerPage> {
+  late AudioPlayer _player;
+  Duration _duration = Duration.zero;
+  Duration _position = Duration.zero;
+  bool _isPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _player = AudioPlayer();
+
+    _init();
+  }
+
+  Future<void> _init() async {
+    try {
+      // 🔥 Dùng AssetSource để phát nhạc local
+      await _player.setAsset(widget.audioUrl);
+
+      _player.durationStream.listen((d) {
+        if (d != null) setState(() => _duration = d);
+      });
+      _player.positionStream.listen((p) {
+        setState(() => _position = p);
+      });
+      _player.playerStateStream.listen((state) {
+        setState(() => _isPlaying = state.playing);
+      });
+    } catch (e) {
+      print("Lỗi khi phát nhạc: $e");
+    }
+  }
+
+  @override
+  void dispose() {
+    _player.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(widget.title),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Ảnh bài hát
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.asset(
+              widget.imageUrl,
+              width: 250,
+              height: 250,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(height: 30),
+
+          // Thanh tiến trình
+          Slider(
+            activeColor: Colors.blueAccent,
+            inactiveColor: Colors.grey,
+            value: _position.inSeconds.toDouble(),
+            max: _duration.inSeconds.toDouble() == 0
+                ? 1
+                : _duration.inSeconds.toDouble(),
+            onChanged: (value) {
+              _player.seek(Duration(seconds: value.toInt()));
+            },
+          ),
+
+          // Hiển thị thời gian
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  _formatDuration(_position),
+                  style: const TextStyle(color: Colors.white),
+                ),
+                Text(
+                  _formatDuration(_duration),
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 30),
+
+          // Nút Play/Pause
+          IconButton(
+            iconSize: 80,
+            color: Colors.white,
+            icon: Icon(_isPlaying ? Icons.pause_circle : Icons.play_circle),
+            onPressed: () {
+              _isPlaying ? _player.pause() : _player.play();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatDuration(Duration d) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(d.inMinutes.remainder(60));
+    final seconds = twoDigits(d.inSeconds.remainder(60));
+    return "$minutes:$seconds";
   }
 }
