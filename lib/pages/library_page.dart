@@ -4,11 +4,13 @@ class MusicItem {
   final String title;
   final String subtitle;
   final String imageUrl;
+  final String audioUrl;
 
   MusicItem({
     required this.imageUrl,
     required this.subtitle,
-    required this.title 
+    required this.title ,
+    required this.audioUrl
   });
 }
 
@@ -29,17 +31,21 @@ List<MusicItem> playlists = [
   MusicItem(
     title: "Nhạc trẻ hot nhất",
     subtitle: "Danh sách phát • V-Pop",
-    imageUrl: ""
+    imageUrl: "",
+    audioUrl: "assets/audio/10 Mất 1 Còn Không (Td Remix).mp3"
   ),
   MusicItem(
     title: "Lofi Chill",
     subtitle: "Danh sách phát • Relax",
     imageUrl: "https://i.scdn.co/image/ab67706f00000002f3c1a9e67d9f5158b6f2c9e6",
+    audioUrl: "assets/audio/Để Anh Lương Thiện (Huy PT Remix).mp3"
+
   ),
   MusicItem(
     title: "Workout Playlist",
     subtitle: "Danh sách phát • EDM",
     imageUrl: "https://i.scdn.co/image/ab67616d0000b2737b9e2d1e17a3e7c4c7d3d09f",
+    audioUrl: "assets/audio/chẳng phải tình đầu sao đau đến thế.mp3"
   ),
 ];
 
@@ -49,11 +55,13 @@ List<MusicItem> dsnghsi = [
     title: "Sơn Tùng M-TP",
     subtitle: "Pop, V-Pop",
     imageUrl: "assets/images/maxresdefault.jpg",
+    audioUrl: ""
   ),
   MusicItem(
     title: "Đen Vâu",
     subtitle: "Rap, Hip-hop",
     imageUrl: "assets/images/Son-Tung-MTP2.jpg",
+    audioUrl: ""
   ),
 ];
 
@@ -63,11 +71,13 @@ List<MusicItem> dsalbum = [
     title: "Chúng Ta Của Hiện Tại",
     subtitle: "Sơn Tùng M-TP • 2020",
     imageUrl: "https://i.scdn.co/image/ab67616d0000b2735f68a9a5b123abcfa89342b8",
+    audioUrl: ""
   ),
   MusicItem(
     title: "99%",
     subtitle: "Đức Phúc • 2022",
     imageUrl: "https://i.scdn.co/image/ab67616d0000b273ddfba54a2f8d481cbb123a7c",
+    audioUrl: ""
   ),
 ];
 
@@ -116,7 +126,8 @@ List<MusicItem> dsalbum = [
                       MusicItem(
                         title: titleController.text.trim(),
                         imageUrl: "",
-                        subtitle: ""
+                        subtitle: "",
+                        audioUrl: ""
                       ));
                   });
                   Navigator.pop(context);
@@ -204,7 +215,7 @@ MusicItem _hienThiTheoDanhMuc(String _selectedFilter, int index){
   }else if (_selectedFilter == "Album"){
     return dsalbum[index];
   }else{
-    return MusicItem(imageUrl: "", subtitle: "", title: "khong co du lieu");
+    return MusicItem(imageUrl: "", subtitle: "", title: "khong co du lieu", audioUrl: "");
   }
 }
 
@@ -321,7 +332,7 @@ MusicItem _hienThiTheoDanhMuc(String _selectedFilter, int index){
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const PlaylistDetailPage(),
+                          builder: (context) => const PlayerPage(),
                         ),
                       );
                     },
@@ -379,9 +390,14 @@ class _SearchPagelibState extends State<SearchPagelib> {
 }
 
 
-class PlaylistDetailPage extends StatelessWidget {
-  const PlaylistDetailPage({super.key});
+class PlayerPage extends StatefulWidget {
+  const PlayerPage({super.key});
 
+  @override
+  State<PlayerPage> createState() => _PlayerPageState();
+}
+
+class _PlayerPageState extends State<PlayerPage> {
   @override
   Widget build(BuildContext context) {
     return const Placeholder();
