@@ -79,6 +79,55 @@ List<MusicItem> dsalbum = [
     });
   }
 
+  void _addPlaylist() {
+    setState(() {
+      showDialog(
+        context: context,
+        builder: (context) {
+          TextEditingController titleController = TextEditingController();
+          TextEditingController subtitleController = TextEditingController();
+
+          return AlertDialog(
+            backgroundColor: const Color(0xFF2C2C2C),
+            title: const Text("them play list", style: TextStyle(color: Colors.white),),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: titleController,
+                  ),
+                  TextField(
+                    controller: subtitleController,
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: const Text("Huy", style: TextStyle(color: Colors.redAccent)),
+                onPressed: () => Navigator.pop(context),
+              ),
+              TextButton(
+                child:  const Text("Them", style: TextStyle(color: Colors.greenAccent),),
+                onPressed: () {
+                  setState(() {
+                    playlists.add(
+                      MusicItem(
+                        title: titleController.text.trim(),
+                        imageUrl: "",
+                        subtitle: ""
+                      ));
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        } 
+      );
+    });
+  }
 
   void _addNgheSi(){
     setState(() {
