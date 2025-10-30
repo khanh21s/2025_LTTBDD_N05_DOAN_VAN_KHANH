@@ -424,6 +424,35 @@ MusicItem _hienThiTheoDanhMuc(String _selectedFilter, int index){
                         });
                       },
                     ),
+
+                    IconButton(
+                      icon: const Icon(Icons.skip_next, color: Colors.white),
+                      onPressed: () async{
+                        // lay ds hien tai (playlist, dsngsi, ds album)
+                        List<MusicItem> currentList = [];
+                        if(_selectedFilter == "Playlist"){
+                          currentList = playlists;
+                        }else if(_selectedFilter == "Nghệ sĩ"){
+                          currentList = dsnghsi;
+                        }else if(_selectedFilter == "Album"){
+                          currentList = dsalbum;
+                        }
+                        // tim vi tri hien tai va chuyen bai
+                        final currentIndex = currentList.indexOf(_currentSong!);
+                        if (currentIndex != -1 && currentIndex < currentList.length - 1) {
+                        final nextSong = currentList[currentIndex + 1];
+                        setState(() {
+                          _currentSong = nextSong;
+                        });
+                        await _player!.setAsset(nextSong.audioUrl);
+                        await _player!.play();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Không có bài tiếp theo')),
+                        );
+                      }
+                    },
+                    ),
                     const SizedBox(width: 8),
                   ],
                 ),
