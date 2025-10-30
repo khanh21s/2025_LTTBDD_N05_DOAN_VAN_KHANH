@@ -25,6 +25,9 @@ class LibraryPage extends StatefulWidget {
 class _LibraryPageState extends State<LibraryPage> {
   // State quản lý filter
   String _selectedFilter = "Playlist";
+  MusicItem? _currentSong;
+  AudioPlayer? _player;
+  bool _isPlaying = false;
 
 // State quản lý danh sách (sau này có thể fetch từ API)
 // Playlist mẫu
@@ -172,6 +175,7 @@ List<MusicItem> dsalbum = [
               _addPlaylist();
             },
           ),
+
           ListTile(
             leading: const Icon(Icons.person_add, color: Colors.white),
             title: const Text("Thêm Nghệ sĩ", style: TextStyle(color: Colors.white)),
@@ -329,24 +333,110 @@ MusicItem _hienThiTheoDanhMuc(String _selectedFilter, int index){
                       item.subtitle,
                       style: TextStyle(color: Colors.grey[600]),
                     ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PlayerPage(title: item.title, imageUrl: item.imageUrl, audioUrl: item.audioUrl,),
-                        ),
-                      );
+                    onTap: () async {
+                      setState(() {
+                        _currentSong = item;
+                        _player ??= AudioPlayer();
+                      });
+                      try {
+                        await _player!.setAsset(item.audioUrl);
+                        await _player!.play();
+                        
+                      _player!.playerStateStream.listen((state) {
+                        setState(() {
+                          _isPlaying = state.playing;
+                        });
+                      });
+                      } catch (e) {
+                        print('loi phat nhac: $e');
+                      }
                     },
                   );
                 },
               ),
-            )
+            ),
+            if (_currentSong != null)
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => PlayerPage(
+                      title: _currentSong!.title,
+                      imageUrl: _currentSong!.imageUrl,
+                      audioUrl: _currentSong!.audioUrl,
+                      existingPlayer: _player,
+                      onClose: () {
+                        setState(() {
+                          _currentSong = null; // Ẩn mini player khi bấm X
+                        });
+                      },
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                height: 70,
+                margin: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2C2C2C),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 8),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: _currentSong!.imageUrl.startsWith("http")
+                          ? Image.network(
+                              _currentSong!.imageUrl,
+                              width: 56,
+                              height: 56,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              _currentSong!.imageUrl,
+                              width: 56,
+                              height: 56,
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        _currentSong!.title,
+                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        _isPlaying ? Icons.pause : Icons.play_arrow,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (_isPlaying) {
+                            _player!.pause();
+                          } else {
+                            _player!.play();
+                          }
+                        });
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
+
+
 
 // trang tim kiem khi bam vao kinh lup
 class SearchPagelib extends StatefulWidget {
@@ -396,12 +486,16 @@ class PlayerPage extends StatefulWidget {
   final String title;
   final String imageUrl;
   final String audioUrl;
+  final AudioPlayer? existingPlayer;
+  final VoidCallback? onClose; // callback khi bấm nút X
 
   const PlayerPage({
     super.key,
     required this.title,
     required this.imageUrl,
     required this.audioUrl,
+    this.existingPlayer,
+    this.onClose,
   });
 
   @override
@@ -417,25 +511,23 @@ class _PlayerPageState extends State<PlayerPage> {
   @override
   void initState() {
     super.initState();
-    _player = AudioPlayer();
+    _player = widget.existingPlayer ?? AudioPlayer();
+    if (widget.existingPlayer == null) _init();
 
-    _init();
+    _player.durationStream.listen((d) {
+      if (d != null) setState(() => _duration = d);
+    });
+    _player.positionStream.listen((p) {
+      setState(() => _position = p);
+    });
+    _player.playerStateStream.listen((state) {
+      setState(() => _isPlaying = state.playing);
+    });
   }
 
   Future<void> _init() async {
     try {
-      // 🔥 Dùng AssetSource để phát nhạc local
       await _player.setAsset(widget.audioUrl);
-
-      _player.durationStream.listen((d) {
-        if (d != null) setState(() => _duration = d);
-      });
-      _player.positionStream.listen((p) {
-        setState(() => _position = p);
-      });
-      _player.playerStateStream.listen((state) {
-        setState(() => _isPlaying = state.playing);
-      });
     } catch (e) {
       print("Lỗi khi phát nhạc: $e");
     }
@@ -443,7 +535,7 @@ class _PlayerPageState extends State<PlayerPage> {
 
   @override
   void dispose() {
-    _player.dispose();
+    if (widget.existingPlayer == null) _player.dispose();
     super.dispose();
   }
 
@@ -454,56 +546,46 @@ class _PlayerPageState extends State<PlayerPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              widget.onClose?.call(); // báo cho LibraryPage ẩn mini player
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Ảnh bài hát
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
-              widget.imageUrl,
-              width: 250,
-              height: 250,
-              fit: BoxFit.cover,
-            ),
+            child: widget.imageUrl.startsWith("http")
+                ? Image.network(widget.imageUrl, width: 250, height: 250, fit: BoxFit.cover)
+                : Image.asset(widget.imageUrl, width: 250, height: 250, fit: BoxFit.cover),
           ),
           const SizedBox(height: 30),
-
-          // Thanh tiến trình
           Slider(
             activeColor: Colors.blueAccent,
             inactiveColor: Colors.grey,
             value: _position.inSeconds.toDouble(),
-            max: _duration.inSeconds.toDouble() == 0
-                ? 1
-                : _duration.inSeconds.toDouble(),
+            max: _duration.inSeconds.toDouble() == 0 ? 1 : _duration.inSeconds.toDouble(),
             onChanged: (value) {
               _player.seek(Duration(seconds: value.toInt()));
             },
           ),
-
-          // Hiển thị thời gian
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  _formatDuration(_position),
-                  style: const TextStyle(color: Colors.white),
-                ),
-                Text(
-                  _formatDuration(_duration),
-                  style: const TextStyle(color: Colors.white),
-                ),
+                Text(_formatDuration(_position), style: const TextStyle(color: Colors.white)),
+                Text(_formatDuration(_duration), style: const TextStyle(color: Colors.white)),
               ],
             ),
           ),
-
           const SizedBox(height: 30),
-
-          // Nút Play/Pause
           IconButton(
             iconSize: 80,
             color: Colors.white,
