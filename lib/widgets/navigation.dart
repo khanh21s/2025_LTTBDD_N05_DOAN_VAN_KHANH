@@ -31,12 +31,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
           currentIndex: _selectedIndex,
           onTap: (index) {
             setState(() {
-              if (index == 4) {
-                _showCreateDialog(context);
-              } else {
                 _selectedIndex = index;
                 widget.onPageChanged?.call(index);
-              }
             });
           },
           type: BottomNavigationBarType.fixed,
@@ -69,48 +65,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
             BottomNavigationBarItem(
               icon: Icon(Icons.add_outlined),
               activeIcon: Icon(Icons.cancel_outlined),
-              label: 'Tạo',
+              label: 'Cá nhân',
             ),
           ],
         ),
       ],
-    );
-  }
-  void _showCreateDialog(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: const Color(0xFF282828),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.playlist_add, color: Colors.white),
-              title: const Text(
-                'Tạo playlist',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.folder_outlined, color: Colors.white),
-              title: const Text(
-                'Tạo thư mục playlist',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

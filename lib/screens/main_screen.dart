@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/pages/person_page.dart';
 import '../widgets/navigation.dart';
 import '../widgets/sidebar.dart';
 import '../pages/home_page.dart';
@@ -21,6 +22,7 @@ class _MainScreenState extends State<MainScreen> {
     SearchPage(),
     LibraryPage(),
     PremiumPage(),
+    PersonPage(),
   ];
 
   @override
@@ -28,8 +30,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
 
-      appBar: (_currentIndex != 3 && _currentIndex != 4)
-          ? AppBar(
+      appBar: (_currentIndex != 3) ? AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
         leading: Builder(
