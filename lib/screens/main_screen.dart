@@ -129,7 +129,7 @@ class _MainScreenState extends State<MainScreen> {
             Positioned(
               left: 0,
               right: 0,
-              bottom: 0,
+              bottom: kBottomNavigationBarHeight,
               child: MiniPlayer(
                 player: _player,
                 currentSong: _currentSong,

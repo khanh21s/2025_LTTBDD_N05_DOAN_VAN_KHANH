@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:my_app/pages/music_data.dart';
 
 class MusicItem {
   final String title;
@@ -11,13 +10,13 @@ class MusicItem {
   MusicItem({
     required this.imageUrl,
     required this.subtitle,
-    required this.title,
+    required this.title ,
     required this.audioUrl
   });
 }
 
 class LibraryPage extends StatefulWidget {
-  final Function(MusicItem)? onSongSelected; //thêm callback
+  final Function(MusicItem)? onSongSelected; // thêm callback
   const LibraryPage({super.key, this.onSongSelected});
 
   @override
@@ -32,6 +31,28 @@ class _LibraryPageState extends State<LibraryPage> {
   bool _isPlaying = false;
 
 // State quản lý danh sách (sau này có thể fetch từ API)
+// Playlist mẫu
+List<MusicItem> playlists = [
+  MusicItem(
+    title: "Nhạc trẻ hot nhất",
+    subtitle: "Danh sách phát • V-Pop",
+    imageUrl: "assets/images/maxresdefault.jpg",
+    audioUrl: "assets/audio/10 Mất 1 Còn Không (Td Remix).mp3"
+  ),
+  MusicItem(
+    title: "Lofi Chill",
+    subtitle: "Danh sách phát • Relax",
+    imageUrl: "assets/images/maxresdefault.jpg",
+    audioUrl: "assets/audio/Để Anh Lương Thiện (Huy PT Remix).mp3"
+
+  ),
+  MusicItem(
+    title: "Workout Playlist",
+    subtitle: "Danh sách phát • EDM",
+    imageUrl: "assets/images/maxresdefault.jpg",
+    audioUrl: "assets/audio/chẳng phải tình đầu sao đau đến thế.mp3"
+  ),
+];
 
 // Nghệ sĩ mẫu
 List<MusicItem> dsnghsi = [
@@ -313,28 +334,15 @@ MusicItem _hienThiTheoDanhMuc(String _selectedFilter, int index){
                       item.subtitle,
                       style: TextStyle(color: Colors.grey[600]),
                     ),
-                    onTap: () async {
-                      setState(() {
-                        _currentSong = item;
-                        _player ??= AudioPlayer();
-                      });
-                      try {
-                        await _player!.setAsset(item.audioUrl);
-                        await _player!.play();
-                        
-                      _player!.playerStateStream.listen((state) {
-                        setState(() {
-                          _isPlaying = state.playing;
-                        });
-                      });
-                      } catch (e) {
-                        print('loi phat nhac: $e');
+                    onTap: () {
+                        if (item.audioUrl.isNotEmpty) {
+                        widget.onSongSelected?.call(item); // 🔁 Gửi bài hát về MainScreen
                       }
                     },
                   );
                 },
               ),
-            ),
+            ),   
           ],
         ),
       ),
@@ -385,4 +393,5 @@ class _SearchPagelibState extends State<SearchPagelib> {
     );
   }
 }
+
 
