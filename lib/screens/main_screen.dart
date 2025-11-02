@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:my_app/pages/mini_player.dart';
+import 'package:my_app/datas/music_data.dart';
 import '../widgets/navigation.dart';
 import '../widgets/sidebar.dart';
 import '../widgets/mini_player.dart';

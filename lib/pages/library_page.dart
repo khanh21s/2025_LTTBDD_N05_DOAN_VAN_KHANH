@@ -2,19 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:my_app/datas/music_data.dart';
 
-class MusicItem {
-  final String title;
-  final String subtitle;
-  final String imageUrl;
-  final String audioUrl;
-
-  MusicItem({
-    required this.imageUrl,
-    required this.subtitle,
-    required this.title ,
-    required this.audioUrl
-  });
-}
 
 class LibraryPage extends StatefulWidget {
   final Function(MusicItem)? onSongSelected; // thêm callback
@@ -39,13 +26,15 @@ List<MusicItem> dsnghsi = [
     title: "Sơn Tùng M-TP",
     subtitle: "Pop, V-Pop",
     imageUrl: "assets/images/maxresdefault.jpg",
-    audioUrl: ""
+    audioUrl: "",
+    author: ""
   ),
   MusicItem(
     title: "Đen Vâu",
     subtitle: "Rap, Hip-hop",
     imageUrl: "assets/images/Son-Tung-MTP2.jpg",
-    audioUrl: ""
+    audioUrl: "",
+    author: ""
   ),
 ];
 
@@ -55,13 +44,15 @@ List<MusicItem> dsalbum = [
     title: "Chúng Ta Của Hiện Tại",
     subtitle: "Sơn Tùng M-TP • 2020",
     imageUrl: "https://i.scdn.co/image/ab67616d0000b2735f68a9a5b123abcfa89342b8",
-    audioUrl: ""
+    audioUrl: "",
+    author: ""
   ),
   MusicItem(
     title: "99%",
     subtitle: "Đức Phúc • 2022",
     imageUrl: "https://i.scdn.co/image/ab67616d0000b273ddfba54a2f8d481cbb123a7c",
-    audioUrl: ""
+    audioUrl: "",
+    author: ""
   ),
 ];
 
@@ -111,7 +102,9 @@ List<MusicItem> dsalbum = [
                         title: titleController.text.trim(),
                         imageUrl: "",
                         subtitle: "",
-                        audioUrl: ""
+                        audioUrl: "",
+                        author: ""
+
                       ));
                   });
                   Navigator.pop(context);
@@ -200,7 +193,7 @@ MusicItem _hienThiTheoDanhMuc(String _selectedFilter, int index){
   }else if (_selectedFilter == "Album"){
     return dsalbum[index];
   }else{
-    return MusicItem(imageUrl: "", subtitle: "", title: "khong co du lieu", audioUrl: "");
+    return MusicItem(imageUrl: "", subtitle: "", title: "khong co du lieu", audioUrl: "", author: "");
   }
 }
 
