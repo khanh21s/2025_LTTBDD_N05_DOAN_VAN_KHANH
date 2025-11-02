@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:my_app/datas/music_data.dart';
 
 class MusicItem {
   final String title;
@@ -31,28 +32,6 @@ class _LibraryPageState extends State<LibraryPage> {
   bool _isPlaying = false;
 
 // State quản lý danh sách (sau này có thể fetch từ API)
-// Playlist mẫu
-List<MusicItem> playlists = [
-  MusicItem(
-    title: "Nhạc trẻ hot nhất",
-    subtitle: "Danh sách phát • V-Pop",
-    imageUrl: "assets/images/maxresdefault.jpg",
-    audioUrl: "assets/audio/10 Mất 1 Còn Không (Td Remix).mp3"
-  ),
-  MusicItem(
-    title: "Lofi Chill",
-    subtitle: "Danh sách phát • Relax",
-    imageUrl: "assets/images/maxresdefault.jpg",
-    audioUrl: "assets/audio/Để Anh Lương Thiện (Huy PT Remix).mp3"
-
-  ),
-  MusicItem(
-    title: "Workout Playlist",
-    subtitle: "Danh sách phát • EDM",
-    imageUrl: "assets/images/maxresdefault.jpg",
-    audioUrl: "assets/audio/chẳng phải tình đầu sao đau đến thế.mp3"
-  ),
-];
 
 // Nghệ sĩ mẫu
 List<MusicItem> dsnghsi = [
