@@ -56,7 +56,12 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 20),
 
                 // Nội dung thay đổi theo nút được chọn
-                if (showMusic) _buildMusicSection() else _buildPodcastSection(),
+                if (showMusic) ...
+                [
+                _buildAuthorAlbumSection(), 
+                  _buildMusicSection(), 
+                const SizedBox(height: 20,)]
+                else _buildPodcastSection(),
 
                 const SizedBox(height: 100),
               ],
@@ -127,6 +132,178 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+  // 🎵 ALBUM THEO TÁC GIẢ (TỰ ĐỘNG CUỘN)
+Widget _buildAuthorAlbumSection() {
+  final authors = playlists.map((e) => e.author).toSet().toList();
+  final PageController pageController = PageController(viewportFraction: 0.96);
+
+  // Tự động chuyển trang sau 2 giây
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    int currentPage = 0;
+    Future.doWhile(() async {
+      await Future.delayed(const Duration(seconds: 3));
+      if (!pageController.hasClients) return false;
+      currentPage = (currentPage + 1) % authors.length;
+      pageController.animateToPage(
+        currentPage,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      );
+      return true;
+    });
+  });
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        "Album theo tác giả",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      const SizedBox(height: 12),
+
+      // PageView cuộn ngang
+      SizedBox(
+        height: 210,
+        child: PageView.builder(
+          controller: pageController,
+          itemCount: authors.length,
+          itemBuilder: (context, index) {
+            final author = authors[index];
+            final songs = playlists.where((e) => e.author == author).toList();
+            final image = songs.first.imageUrl;
+
+            return AnimatedBuilder(
+              animation: pageController,
+              builder: (context, child) {
+                double value = 1.0;
+                if (pageController.position.haveDimensions) {
+                  value = (pageController.page! - index).abs();
+                  value = (1 - (value * 0.2)).clamp(0.8, 1.0);
+                }
+                return Transform.scale(scale: value, child: child);
+              },
+              child: GestureDetector(
+                onTap: () {
+                  // Khi bấm vào album -> hiện danh sách bài của tác giả
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.black,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
+                    builder: (_) => Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Ảnh + tên tác giả
+                          Row(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.asset(
+                                  image,
+                                  height: 60,
+                                  width: 60,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                author,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+
+                          // Danh sách bài hát của tác giả
+                          ...songs.map((song) => ListTile(
+                                leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(6),
+                                  child: Image.asset(
+                                    song.imageUrl,
+                                    height: 45,
+                                    width: 45,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                title: Text(song.title,
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                                subtitle: Text(song.subtitle,
+                                    style:
+                                        const TextStyle(color: Colors.grey)),
+                                onTap: () {
+                                  widget.onSongSelected?.call(song);
+                                  Navigator.pop(context);
+                                },
+                              )),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1E1E1E),
+                    borderRadius: BorderRadius.circular(14),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.4),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      )
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(14),
+                          topRight: Radius.circular(14),
+                        ),
+                        child: Image.asset(
+                          image,
+                          height: 140,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        author,
+                        style: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      const Text(
+                        "Album nổi bật",
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    ],
+  );
+}
 
   // MUSIC SECTION
   Widget _buildMusicSection() {
