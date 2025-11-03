@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/datas/music_data.dart';
 import 'package:my_app/datas/podcast_data.dart';
+import 'package:my_app/pages/author_song_page.dart';
 import 'package:my_app/widgets/mini_player.dart';
 
 
@@ -54,6 +55,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 const SizedBox(height: 20),
+
                 // Nội dung thay đổi theo nút được chọn
                 if (showMusic) ...
                 [
@@ -135,6 +137,9 @@ class _HomePageState extends State<HomePage> {
 
   // MUSIC SECTION
   Widget _buildMusicSection() {
+  // Danh sách tác giả (loại trùng)
+  final authors = playlists.map((e) => e.author).toSet().toList();
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -148,21 +153,21 @@ class _HomePageState extends State<HomePage> {
       ),
       const SizedBox(height: 12),
 
-      // Danh sách nhạc cuộn ngang
+      // 🎵 Danh sách nhạc cuộn ngang
       SizedBox(
-        height: 200, // chiều cao cố định cho mỗi item
+        height: 200,
         child: ListView.builder(
-          scrollDirection: Axis.horizontal, // cuộn ngang
+          scrollDirection: Axis.horizontal,
           itemCount: playlists.length,
           itemBuilder: (context, index) {
             final music = playlists[index];
             return GestureDetector(
               onTap: () {
-                // TODO: mở trình phát nhạc hoặc cập nhật currentMusic
                 widget.onSongSelected?.call(music);
+                playMusic(music);
               },
               child: Container(
-                width: 160, // độ rộng mỗi item
+                width: 160,
                 margin: const EdgeInsets.only(right: 12),
                 decoration: BoxDecoration(
                   color: Colors.grey[900],
@@ -171,9 +176,9 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Ảnh bài hát
                     ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(12)),
                       child: Image.asset(
                         music.imageUrl,
                         height: 120,
@@ -181,7 +186,6 @@ class _HomePageState extends State<HomePage> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    // Tiêu đề và phụ đề
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -215,9 +219,83 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
+
+      const SizedBox(height: 30),
+
+      // 🎧 ALBUM THEO TÁC GIẢ
+      const Text(
+        "Album theo tác giả",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      const SizedBox(height: 12),
+
+      SizedBox(
+        height: 160,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: authors.length,
+          itemBuilder: (context, index) {
+            final author = authors[index];
+            // Lấy ảnh đầu tiên của tác giả làm ảnh bìa
+            final cover = playlists.firstWhere((m) => m.author == author).imageUrl;
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => AuthorSongsPage(author: author),
+                  ),
+                );
+              },
+              child: Container(
+                width: 140,
+                margin: const EdgeInsets.only(right: 12),
+                decoration: BoxDecoration(
+                  color: Colors.grey[900],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(12)),
+                      child: Image.asset(
+                        cover,
+                        height: 100,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      author,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "Xem tất cả bài hát",
+                      style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     ],
   );
 }
+
 
 
   // PODCAST SECTION
