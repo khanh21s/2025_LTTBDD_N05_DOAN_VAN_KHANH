@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/datas/music_data.dart';
 import 'package:my_app/datas/podcast_data.dart';
+import 'package:my_app/widgets/mini_player.dart';
 
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final Function(MusicItem)? onSongSelected;
+  const HomePage({super.key, this.onSongSelected});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -29,7 +31,7 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         title: const Text(
           "Spotify",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
         ),
       ),
       body: Stack(
@@ -128,18 +130,90 @@ class _HomePageState extends State<HomePage> {
 
   // MUSIC SECTION
   Widget _buildMusicSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Danh sách nhạc hôm nay",
-          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        "Danh sách nhạc hôm nay",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
         ),
-        const SizedBox(height: 12),
-        
-      ],
-    );
-  }
+      ),
+      const SizedBox(height: 12),
+
+      // Danh sách nhạc cuộn ngang
+      SizedBox(
+        height: 200, // chiều cao cố định cho mỗi item
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal, // cuộn ngang
+          itemCount: playlists.length,
+          itemBuilder: (context, index) {
+            final music = playlists[index];
+            return GestureDetector(
+              onTap: () {
+                // TODO: mở trình phát nhạc hoặc cập nhật currentMusic
+                widget.onSongSelected?.call(music);
+              },
+              child: Container(
+                width: 160, // độ rộng mỗi item
+                margin: const EdgeInsets.only(right: 12),
+                decoration: BoxDecoration(
+                  color: Colors.grey[900],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Ảnh bài hát
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                      child: Image.asset(
+                        music.imageUrl,
+                        height: 120,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    // Tiêu đề và phụ đề
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            music.title,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            music.subtitle,
+                            style: TextStyle(
+                              color: Colors.grey[400],
+                              fontSize: 12,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    ],
+  );
+}
+
 
   // PODCAST SECTION
   Widget _buildPodcastSection() {
