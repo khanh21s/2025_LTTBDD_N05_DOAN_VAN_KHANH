@@ -107,8 +107,8 @@ class _MainScreenState extends State<MainScreen> {
           ),
 
           // Avatar
-          if (_currentIndex != 3 && _currentIndex != 4)
-            Positioned(
+          if (_currentIndex != 3 && _currentIndex != 4 && _currentIndex != 0)
+            Positioned( 
               top: 20,
               left: 16,
               child: Builder(
