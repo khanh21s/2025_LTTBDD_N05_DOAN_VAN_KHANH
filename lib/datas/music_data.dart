@@ -38,3 +38,49 @@ List<MusicItem> playlists = [
     author: "tac gia 2"
   ),
 ];
+
+List<MusicItem> alllists = [
+  MusicItem(
+    imageUrl: "assets/audio/Âm Thầm Bên Em.mp3", 
+    subtitle: "K-Pop", 
+    title: "",
+    audioUrl: "assets/audio/Âm Thầm Bên Em.mp3", 
+    author: ""
+  ),
+  MusicItem(
+    imageUrl: "assets/images/chap-chon.jpg", 
+    subtitle: "Pop", 
+    title: "", 
+    audioUrl: "assets/audi/Chập Chờn.mp3", 
+    author: ""
+  ),
+  MusicItem(
+    imageUrl: "assets/images/hay-trao-cho-anh.jpg", 
+    subtitle: "K-Pop", 
+    title: "", 
+    audioUrl: "assets/audio/Hãy Trao Cho Anh.mp3", 
+    author: ""
+  ),
+  MusicItem(
+    imageUrl: "assets/images/lan-uu-tien.jpg", 
+    subtitle: "", 
+    title: "Pop", 
+    audioUrl: "assets/audio/LÀN ƯU TIÊN.mp3", 
+    author: ""
+  ),
+  MusicItem(
+    imageUrl: "assets/images/noi-nay-co-anh.jpg", 
+    subtitle: "", 
+    title: "Classical", 
+    audioUrl: "assets/images/noi-nay-co-anh.jpg", 
+    author: ""
+  ),
+  MusicItem(
+    imageUrl: "assets/images/tran-bo-nho.jpg", 
+    subtitle: "", 
+    title: "", 
+    audioUrl: "assets/audio/TRÀN BỘ NHỚ.mp3", 
+    author: " "
+  ),
+
+];
