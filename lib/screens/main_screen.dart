@@ -109,6 +109,13 @@ class _MainScreenState extends State<MainScreen> {
       );
     }
   }
+  // ham reload page library
+  void _reloadLibraryPage() {
+  setState(() {
+    _pages[2] = LibraryPage(onSongSelected: _playSong);
+  });
+}
+
 
 
   @override
@@ -128,6 +135,9 @@ class _MainScreenState extends State<MainScreen> {
             pages: _pages,
             onPageChanged: (index) {
               setState(() => _currentIndex = index);
+              if(index == 2){
+                _reloadLibraryPage();
+              }
             },
           ),
 

@@ -30,10 +30,19 @@ class _BottomNavBarState extends State<BottomNavBar> {
         BottomNavigationBar(
           currentIndex: _selectedIndex,
           onTap: (index) {
-            setState(() {
+            if (_selectedIndex == index) {
+              // Nếu bấm lại cùng 1 tab
+              if (index == 2) {
+                // Nếu là tab Thư viện thì reload lại
+                widget.onPageChanged?.call(index);
+              }
+            } else {
+              // Nếu bấm tab khác thì chuyển sang tab đó
+              setState(() {
                 _selectedIndex = index;
                 widget.onPageChanged?.call(index);
-            });
+              });
+            }
           },
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.black,

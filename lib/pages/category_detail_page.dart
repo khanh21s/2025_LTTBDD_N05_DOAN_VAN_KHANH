@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/datas/music_data.dart';
- // để truy cập allLists và MusicItem
 
+// để truy cập allLists và MusicItem
 class CategoryDetailPage extends StatelessWidget {
   final String category;
 
