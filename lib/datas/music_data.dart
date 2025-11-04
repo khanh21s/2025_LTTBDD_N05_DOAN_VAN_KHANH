@@ -41,46 +41,46 @@ List<MusicItem> playlists = [
 
 List<MusicItem> alllists = [
   MusicItem(
-    imageUrl: "assets/audio/Âm Thầm Bên Em.mp3", 
+    imageUrl: "assets/images/am-tham-ben-em.jpg", 
     subtitle: "K-Pop", 
-    title: "",
+    title: "Âm thầm bên em",
     audioUrl: "assets/audio/Âm Thầm Bên Em.mp3", 
-    author: ""
+    author: "Sơn Tùng"
   ),
   MusicItem(
     imageUrl: "assets/images/chap-chon.jpg", 
     subtitle: "Pop", 
-    title: "", 
+    title: "Chập chờn", 
     audioUrl: "assets/audi/Chập Chờn.mp3", 
-    author: ""
+    author: "Dương Domic"
   ),
   MusicItem(
     imageUrl: "assets/images/hay-trao-cho-anh.jpg", 
     subtitle: "K-Pop", 
-    title: "", 
+    title: "Hãy trao cho anh", 
     audioUrl: "assets/audio/Hãy Trao Cho Anh.mp3", 
-    author: ""
+    author: "Sơn Tùng"
   ),
   MusicItem(
     imageUrl: "assets/images/lan-uu-tien.jpg", 
-    subtitle: "", 
+    subtitle: "Làn ưu tiên", 
     title: "Pop", 
     audioUrl: "assets/audio/LÀN ƯU TIÊN.mp3", 
-    author: ""
+    author: "Sơn Tùng"
   ),
   MusicItem(
     imageUrl: "assets/images/noi-nay-co-anh.jpg", 
-    subtitle: "", 
+    subtitle: "Nơi này có anh", 
     title: "Classical", 
     audioUrl: "assets/images/noi-nay-co-anh.jpg", 
-    author: ""
+    author: "Sơn tùng"
   ),
   MusicItem(
     imageUrl: "assets/images/tran-bo-nho.jpg", 
-    subtitle: "", 
-    title: "", 
+    subtitle: "Tràn bộ nhớ", 
+    title: "EDM", 
     audioUrl: "assets/audio/TRÀN BỘ NHỚ.mp3", 
-    author: " "
+    author: "Dương Domic"
   ),
 
 ];

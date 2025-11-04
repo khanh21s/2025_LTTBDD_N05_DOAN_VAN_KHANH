@@ -3,7 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:my_app/datas/music_data.dart';
 import '../widgets/navigation.dart';
 import '../widgets/sidebar.dart';
-import '../widgets/mini_player.dart';
+import '../widgets/mini_player.dart' hide playlists;
 import '../pages/home_page.dart';
 import '../pages/search_page.dart';
 import '../pages/library_page.dart';
@@ -75,6 +75,7 @@ class _MainScreenState extends State<MainScreen> {
           title: _currentSong!.title,
           imageUrl: _currentSong!.imageUrl,
           audioUrl: _currentSong!.audioUrl,
+          author: _currentSong!.author,
           existingPlayer: _player,
           onClose: () {
             setState(() {
@@ -85,6 +86,30 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
+
+  bool isAlreadyInLibrary(MusicItem song) {
+    return playlists.any((item) => item.audioUrl == song.audioUrl);
+  }
+
+  void addToLibrary(BuildContext context, MusicItem song) {
+    if (!isAlreadyInLibrary(song)) {
+      playlists.add(song);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${song.title} đã được thêm vào thư viện 🎵'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${song.title} đã có trong thư viện!'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
 
   @override
   void dispose() {
@@ -136,6 +161,11 @@ class _MainScreenState extends State<MainScreen> {
                 isPlaying: _isPlaying,
                 onTogglePlay: _togglePlay,
                 onTap: _openPlayerPage,
+                onAdd: (){
+                  if(_currentSong != null){
+                    addToLibrary(context, _currentSong!);
+                  }
+                },
               ),
             ),
         ],

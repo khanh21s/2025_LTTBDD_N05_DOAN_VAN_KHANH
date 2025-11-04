@@ -1,9 +1,9 @@
-// TODO Implement this library.
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:my_app/datas/music_data.dart';
-import '../pages/player_page.dart';
-import '../pages/library_page.dart'; // để dùng MusicItem
+
+// Giả sử playlists là danh sách chứa các bài hát trong thư viện
+List<MusicItem> playlists = [];
 
 class MiniPlayer extends StatelessWidget {
   final AudioPlayer player;
@@ -11,6 +11,7 @@ class MiniPlayer extends StatelessWidget {
   final bool isPlaying;
   final VoidCallback onTogglePlay;
   final VoidCallback onTap;
+  final VoidCallback? onAdd;
 
   const MiniPlayer({
     super.key,
@@ -19,6 +20,7 @@ class MiniPlayer extends StatelessWidget {
     required this.isPlaying,
     required this.onTogglePlay,
     required this.onTap,
+    this.onAdd,
   });
 
   @override
@@ -61,6 +63,12 @@ class MiniPlayer extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
+            // Nút dấu cộng
+            IconButton(
+              icon: const Icon(Icons.add, color: Colors.white),
+              onPressed: onAdd, // ✅ chỉ cần gọi callback
+            ),
+            // Nút play/pause
             IconButton(
               icon: Icon(
                 isPlaying ? Icons.pause : Icons.play_arrow,

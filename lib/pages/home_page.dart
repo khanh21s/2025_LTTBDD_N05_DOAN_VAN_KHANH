@@ -173,7 +173,7 @@ class _HomePageState extends State<HomePage> {
   // MUSIC SECTION
   Widget _buildMusicSection() {
     // Danh sách tác giả (loại trùng)
-    final authors = playlists.map((e) => e.author).toSet().toList();
+    final authors = alllists.map((e) => e.author).toSet().toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,13 +193,12 @@ class _HomePageState extends State<HomePage> {
           height: 200,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: playlists.length,
+            itemCount: alllists.length,
             itemBuilder: (context, index) {
-              final music = playlists[index];
+              final music = alllists[index];
               return GestureDetector(
                 onTap: () {
                   widget.onSongSelected?.call(music);
-                  playMusic(music);
                 },
                 child: Container(
                   width: 160,
@@ -277,7 +276,7 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) {
               final author = authors[index];
               // Lấy ảnh đầu tiên của tác giả làm ảnh bìa
-              final cover = playlists
+              final cover = alllists
                   .firstWhere((m) => m.author == author)
                   .imageUrl;
 

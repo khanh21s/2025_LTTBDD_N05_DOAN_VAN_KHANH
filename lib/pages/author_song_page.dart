@@ -9,7 +9,7 @@ class AuthorSongsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Lọc danh sách bài hát theo tác giả
-    final authorSongs = playlists.where((song) => song.author == author).toList();
+    final authorSongs = alllists.where((song) => song.author == author).toList();
 
     return Scaffold(
       backgroundColor: Colors.black,
