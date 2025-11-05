@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   just_audio: ^0.9.36
   palette_generator: ^0.3.3
+  easy_localization: ^3.0.7
 
 dev_dependencies:
   flutter_test:

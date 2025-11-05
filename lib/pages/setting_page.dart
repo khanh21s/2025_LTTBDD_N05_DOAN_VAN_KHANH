@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -9,12 +10,49 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   // 🔹 Lưu trạng thái của các switch
+  String _currentLanguage = "vi"; // Mặc định là tiếng Việt
   final Map<String, bool> _settings = {
     'dataSaver': false,
     'autoplay': true,
     'updateNotifications': true,
     'emailNotifications': false,
   };
+  void _showLanguageDialog() {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xFF1E1E1E),
+        title: const Text(
+          "Chọn ngôn ngữ",
+          style: TextStyle(color: Colors.white),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildLanguageOption("Tiếng Việt", "vi"),
+            _buildLanguageOption("English", "en"),
+          ],
+        ),
+      );
+    },
+  );
+}
+Widget _buildLanguageOption(String name, String code) {
+  return ListTile(
+    title: Text(name, style: const TextStyle(color: Colors.white)),
+    trailing: _currentLanguage == code
+        ? const Icon(Icons.check, color: Color(0xFF1ED760))
+        : null,
+    onTap: () {
+      setState(() {
+        _currentLanguage = code;
+      });
+      Navigator.pop(context);
+    },
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,17 +114,16 @@ class _SettingsPageState extends State<SettingsPage> {
             icon: Icons.notifications_outlined,
             title: "Thông báo cập nhật",
           ),
-          _buildSwitchTile(
-            keyName: 'emailNotifications',
-            icon: Icons.email_outlined,
-            title: "Ngôn ngữ",
-          ),
+          _buildSettingTile(
+            icon: Icons.language, 
+            title: "Ngôn ngữ"
+            ),
           const Divider(color: Colors.grey),
 
           _buildSectionTitle("Giới thiệu"),
           _buildSettingTile(
             icon: Icons.info_outline,
-            title: "Giới thiệu Spotify Clone",
+            title: "Giới thiệu",
             onTap: () {},
           ),
           _buildSettingTile(
@@ -106,7 +143,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
         ],
-      ),
+      )
     );
   }
 
