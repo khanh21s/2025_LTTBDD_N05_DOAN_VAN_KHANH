@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/pages/setting_page.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key});
@@ -107,6 +108,12 @@ class _SidebarState extends State<Sidebar> {
                     onTap: () {
                       Navigator.pop(context);
                       // TODO: xử lý cài đặt
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SettingsPage(),
+                        )
+                      );
                     },
                   ),
                 ],
