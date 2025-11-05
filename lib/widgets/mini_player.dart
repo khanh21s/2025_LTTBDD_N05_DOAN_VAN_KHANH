@@ -75,6 +75,7 @@ class MiniPlayer extends StatelessWidget {
                 color: Colors.white,
               ),
               onPressed: onTogglePlay,
+              
             ),
             const SizedBox(width: 8),
           ],

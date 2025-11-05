@@ -285,7 +285,9 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => AuthorSongsPage(author: author),
+                      builder: (_) => AuthorSongsPage(author: author, onSongSelected: (music){
+                        widget.onSongSelected?.call(music);
+                      }),
                     ),
                   );
                 },
