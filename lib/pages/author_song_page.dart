@@ -5,12 +5,14 @@ import 'package:my_app/widgets/mini_player.dart';
 
 class AuthorSongsPage extends StatefulWidget {
   final String author;
+  final AudioPlayer player;
   final Function(MusicItem) onSongSelected;
 
   const AuthorSongsPage({
     super.key,
     required this.author,
     required this.onSongSelected,
+    required this.player,
   });
 
   @override
@@ -18,45 +20,43 @@ class AuthorSongsPage extends StatefulWidget {
 }
 
 class _AuthorSongsPageState extends State<AuthorSongsPage> {
-  final AudioPlayer _player = AudioPlayer();
   MusicItem? _currentSong;
   bool _isPlaying = false;
-
-  @override
-  void dispose() {
-    _player.dispose();
-    super.dispose();
-  }
 
   void _playSong(MusicItem song) async {
     setState(() {
       _currentSong = song;
     });
 
-    await _player.setAsset(song.audioUrl);
-    await _player.play();
+    try {
+      await widget.player.setAsset(song.audioUrl);
+      await widget.player.play();
 
-    _player.playerStateStream.listen((state) {
-      setState(() {
-        _isPlaying = state.playing;
+      widget.player.playerStateStream.listen((state) {
+        setState(() {
+          _isPlaying = state.playing;
+        });
       });
-    });
 
-    widget.onSongSelected(song); // Gọi callback để cập nhật MiniPlayer ở MainScreen
+      // Gọi callback để cập nhật MiniPlayer ở MainScreen
+      widget.onSongSelected(song);
+    } catch (e) {
+      debugPrint("Lỗi phát nhạc: $e");
+    }
   }
 
   void _togglePlay() {
     setState(() {
       if (_isPlaying) {
-        _player.pause();
+        widget.player.pause();
       } else {
-        _player.play();
+        widget.player.play();
       }
     });
   }
 
   void _openPlayerPage() {
-    // Mở trang Player nếu bạn muốn
+    // Nếu bạn muốn mở trang Player, có thể thêm logic ở đây
   }
 
   void _addToLibrary(BuildContext context, MusicItem song) {
@@ -70,13 +70,17 @@ class _AuthorSongsPageState extends State<AuthorSongsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authorSongs = alllists.where((song) => song.author == widget.author).toList();
+    final authorSongs =
+        alllists.where((song) => song.author == widget.author).toList();
 
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text(widget.author, style: const TextStyle(color: Colors.green)),
+        title: Text(
+          widget.author,
+          style: const TextStyle(color: Colors.green),
+        ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Stack(
@@ -123,7 +127,7 @@ class _AuthorSongsPageState extends State<AuthorSongsPage> {
               right: 0,
               bottom: 0,
               child: MiniPlayer(
-                player: _player,
+                player: widget.player, // ✅ Dùng player chung
                 currentSong: _currentSong,
                 isPlaying: _isPlaying,
                 onTogglePlay: _togglePlay,

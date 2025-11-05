@@ -30,7 +30,10 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _pages = [
-      HomePage(onSongSelected: _playSong),
+      HomePage(
+        onSongSelected: _playSong,
+        player: _player
+        ),
       const SearchPage(),
       LibraryPage(onSongSelected: _playSong), // 🟢 gọi callback
       const PremiumPage(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:my_app/datas/music_data.dart';
 import 'package:my_app/datas/podcast_data.dart';
 import 'package:my_app/pages/author_song_page.dart';
@@ -7,7 +8,8 @@ import 'package:my_app/widgets/sidebar.dart';
 
 class HomePage extends StatefulWidget {
   final Function(MusicItem)? onSongSelected;
-  const HomePage({super.key, this.onSongSelected});
+  final AudioPlayer player;
+  const HomePage({super.key, this.onSongSelected, required this.player});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -287,7 +289,9 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(
                       builder: (_) => AuthorSongsPage(author: author, onSongSelected: (music){
                         widget.onSongSelected?.call(music);
-                      }),
+                      },
+                      player: widget.player,
+                      ),
                     ),
                   );
                 },
