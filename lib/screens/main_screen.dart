@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:my_app/datas/music_data.dart';
@@ -30,12 +31,9 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _pages = [
-      HomePage(
-        onSongSelected: _playSong,
-        player: _player
-        ),
+      HomePage(onSongSelected: _playSong, player: _player),
       const SearchPage(),
-      LibraryPage(onSongSelected: _playSong), // 🟢 gọi callback
+      LibraryPage(onSongSelected: _playSong),
       const PremiumPage(),
     ];
   }
@@ -99,27 +97,25 @@ class _MainScreenState extends State<MainScreen> {
       playlists.add(song);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${song.title} đã được thêm vào thư viện 🎵'),
+          content: Text(tr('added_to_library', args: [song.title])),
           duration: const Duration(seconds: 2),
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${song.title} đã có trong thư viện!'),
+          content: Text(tr('already_in_library', args: [song.title])),
           duration: const Duration(seconds: 2),
         ),
       );
     }
   }
-  // ham reload page library
+
   void _reloadLibraryPage() {
-  setState(() {
-    _pages[2] = LibraryPage(onSongSelected: _playSong);
-  });
-}
-
-
+    setState(() {
+      _pages[2] = LibraryPage(onSongSelected: _playSong);
+    });
+  }
 
   @override
   void dispose() {
@@ -129,6 +125,10 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // 🟩 Dòng này cực kỳ quan trọng
+    // Nó khiến widget rebuild lại mỗi khi đổi ngôn ngữ
+    final locale = context.locale;
+
     return Scaffold(
       backgroundColor: Colors.black,
       drawer: const Sidebar(),
@@ -138,15 +138,13 @@ class _MainScreenState extends State<MainScreen> {
             pages: _pages,
             onPageChanged: (index) {
               setState(() => _currentIndex = index);
-              if(index == 2){
+              if (index == 2) {
                 _reloadLibraryPage();
               }
             },
           ),
-
-          // Avatar
           if (_currentIndex != 3 && _currentIndex != 4 && _currentIndex != 0)
-            Positioned( 
+            Positioned(
               top: 20,
               left: 16,
               child: Builder(
@@ -161,8 +159,6 @@ class _MainScreenState extends State<MainScreen> {
                 },
               ),
             ),
-
-          // 🟩 Mini Player chung toàn app
           if (_currentSong != null)
             Positioned(
               left: 0,
@@ -174,8 +170,8 @@ class _MainScreenState extends State<MainScreen> {
                 isPlaying: _isPlaying,
                 onTogglePlay: _togglePlay,
                 onTap: _openPlayerPage,
-                onAdd: (){
-                  if(_currentSong != null){
+                onAdd: () {
+                  if (_currentSong != null) {
                     addToLibrary(context, _currentSong!);
                   }
                 },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BottomNavBar extends StatefulWidget {
   final List<Widget> pages;
@@ -19,6 +20,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    // 👇 Dòng này rất quan trọng: nó buộc widget rebuild khi đổi ngôn ngữ
+    final locale = context.locale;
+
     return Column(
       children: [
         Expanded(
@@ -51,30 +55,30 @@ class _BottomNavBarState extends State<BottomNavBar> {
           selectedFontSize: 12,
           unselectedFontSize: 12,
           elevation: 0,
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: 'Trang chủ',
+              icon: const Icon(Icons.home_outlined),
+              activeIcon: const Icon(Icons.home),
+              label: tr('home', context: context),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Tìm kiếm',
+              icon: const Icon(Icons.search),
+              label: tr('search', context: context),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.library_music_outlined),
-              activeIcon: Icon(Icons.library_music),
-              label: 'Thư viện',
+              icon: const Icon(Icons.library_music_outlined),
+              activeIcon: const Icon(Icons.library_music),
+              label: tr('library', context: context),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.workspace_premium_outlined),
-              activeIcon: Icon(Icons.workspace_premium),
-              label: 'Premium',
+              icon: const Icon(Icons.workspace_premium_outlined),
+              activeIcon: const Icon(Icons.workspace_premium),
+              label: tr('premium', context: context),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.add_outlined),
-              activeIcon: Icon(Icons.cancel_outlined),
-              label: 'Cá nhân',
+              icon: const Icon(Icons.add_outlined),
+              activeIcon: const Icon(Icons.cancel_outlined),
+              label: tr('personal', context: context),
             ),
           ],
         ),

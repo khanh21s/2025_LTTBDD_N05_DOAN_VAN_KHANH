@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -9,7 +10,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  // 🔹 Lưu trạng thái của các switch
   String _currentLanguage = "vi"; // Mặc định là tiếng Việt
   final Map<String, bool> _settings = {
     'dataSaver': false,
@@ -17,42 +17,67 @@ class _SettingsPageState extends State<SettingsPage> {
     'updateNotifications': true,
     'emailNotifications': false,
   };
-  void _showLanguageDialog() {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        backgroundColor: const Color(0xFF1E1E1E),
-        title: const Text(
-          "Chọn ngôn ngữ",
-          style: TextStyle(color: Colors.white),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildLanguageOption("Tiếng Việt", "vi"),
-            _buildLanguageOption("English", "en"),
-          ],
-        ),
-      );
-    },
-  );
-}
-Widget _buildLanguageOption(String name, String code) {
-  return ListTile(
-    title: Text(name, style: const TextStyle(color: Colors.white)),
-    trailing: _currentLanguage == code
-        ? const Icon(Icons.check, color: Color(0xFF1ED760))
-        : null,
-    onTap: () {
-      setState(() {
-        _currentLanguage = code;
-      });
-      Navigator.pop(context);
-    },
-  );
-}
 
+  @override
+  void initState() {
+    super.initState();
+    _loadLanguage();
+  }
+
+  // 🔹 Load ngôn ngữ đã lưu
+  Future<void> _loadLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lang = prefs.getString('languageCode') ?? 'vi';
+    setState(() {
+      _currentLanguage = lang;
+    });
+  }
+
+  // 🔹 Lưu ngôn ngữ khi thay đổi
+  Future<void> _changeLanguage(String code) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('languageCode', code);
+    setState(() {
+      _currentLanguage = code;
+    });
+
+    // 🔹 Đổi ngôn ngữ toàn app
+    await context.setLocale(Locale(code));
+  }
+
+  // 🔹 Hiển thị hộp chọn ngôn ngữ
+  void _showLanguageDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF1E1E1E),
+          title: Text("select_language".tr(), // 🔸 dùng key từ JSON
+              style: const TextStyle(color: Colors.white)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildLanguageOption("Tiếng Việt", "vi"),
+              _buildLanguageOption("English", "en"),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLanguageOption(String name, String code) {
+    return ListTile(
+      title: Text(name, style: const TextStyle(color: Colors.white)),
+      trailing: _currentLanguage == code
+          ? const Icon(Icons.check, color: Color(0xFF1ED760))
+          : null,
+      onTap: () {
+        _changeLanguage(code);
+        Navigator.pop(context);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +86,9 @@ Widget _buildLanguageOption(String name, String code) {
       appBar: AppBar(
         backgroundColor: const Color(0xFF121212),
         elevation: 0,
-        title: const Text(
-          'Cài đặt và riêng tư',
-          style: TextStyle(
+        title: Text(
+          'settings_title'.tr(), // 🔸 đa ngôn ngữ
+          style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
@@ -78,76 +103,73 @@ Widget _buildLanguageOption(String name, String code) {
         children: [
           const SizedBox(height: 10),
 
-          _buildSectionTitle("Tài khoản"),
+          _buildSectionTitle("account".tr()),
           _buildSettingTile(
             icon: Icons.person_outline,
-            title: "Xem hồ sơ",
+            title: "view_profile".tr(),
             onTap: () => Navigator.pushNamed(context, '/profile'),
           ),
           _buildSettingTile(
             icon: Icons.lock_outline,
-            title: "Đổi mật khẩu",
-            onTap: () {
-              // TODO: Điều hướng đến trang đổi mật khẩu
-            },
+            title: "change_password".tr(),
+            onTap: () {},
           ),
           const Divider(color: Colors.grey),
 
-          _buildSectionTitle("Phát nhạc"),
+          _buildSectionTitle("playback".tr()),
           _buildSwitchTile(
             keyName: 'dataSaver',
             icon: Icons.wifi_tethering,
-            title: "Tiết kiệm dữ liệu",
-            subtitle: "Giảm chất lượng âm thanh khi phát qua mạng di động",
+            title: "data_saver".tr(),
+            subtitle: "data_saver_desc".tr(),
           ),
           _buildSwitchTile(
             keyName: 'autoplay',
             icon: Icons.play_circle_outline,
-            title: "Tự động phát nhạc liên quan",
-            subtitle: "Phát nhạc tương tự sau khi danh sách kết thúc",
+            title: "autoplay".tr(),
+            subtitle: "autoplay_desc".tr(),
           ),
           const Divider(color: Colors.grey),
 
-          _buildSectionTitle("Thông báo"),
+          _buildSectionTitle("notifications".tr()),
           _buildSwitchTile(
             keyName: 'updateNotifications',
             icon: Icons.notifications_outlined,
-            title: "Thông báo cập nhật",
+            title: "update_notifications".tr(),
           ),
           _buildSettingTile(
-            icon: Icons.language, 
-            title: "Ngôn ngữ"
-            ),
+            icon: Icons.language,
+            title: "language".tr(),
+            onTap: _showLanguageDialog,
+          ),
           const Divider(color: Colors.grey),
 
-          _buildSectionTitle("Giới thiệu"),
+          _buildSectionTitle("about".tr()),
           _buildSettingTile(
             icon: Icons.info_outline,
-            title: "Giới thiệu",
+            title: "about_app".tr(),
             onTap: () {},
           ),
           _buildSettingTile(
             icon: Icons.logout,
-            title: "Đăng xuất",
+            title: "logout".tr(),
             color: Colors.redAccent,
-            onTap: () {
-              // TODO: Gọi Supabase.auth.signOut();
-            },
+            onTap: () {},
           ),
 
           const SizedBox(height: 30),
           Center(
             child: Text(
-              "Phiên bản 1.0.0",
+              "version".tr(args: ['1.0.0']),
               style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
             ),
           ),
         ],
-      )
+      ),
     );
   }
 
-  // 🔹 Tiêu đề nhóm
+  // 🔹 Các widget phụ
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -162,7 +184,6 @@ Widget _buildLanguageOption(String name, String code) {
     );
   }
 
-  // 🔹 Tile cài đặt bình thường
   Widget _buildSettingTile({
     required IconData icon,
     required String title,
@@ -181,7 +202,6 @@ Widget _buildLanguageOption(String name, String code) {
     );
   }
 
-  // 🔹 Tile có công tắc giữ trạng thái
   Widget _buildSwitchTile({
     required String keyName,
     required IconData icon,

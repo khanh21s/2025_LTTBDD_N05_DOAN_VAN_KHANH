@@ -1,0 +1,25 @@
+{
+  "settings_title": "Settings",
+  "select_language": "Select Language",
+  "account": "Account",
+  "view_profile": "View Profile",
+  "change_password": "Change Password",
+  "playback": "Playback",
+  "data_saver": "Data Saver",
+  "data_saver_desc": "Reduce music quality to save mobile data",
+  "autoplay": "Autoplay",
+  "autoplay_desc": "Automatically play next song after current ends",
+  "notifications": "Notifications",
+  "update_notifications": "Update Notifications",
+  "language": "Language",
+  "about": "About",
+  "about_app": "About Moodify App",
+  "logout": "Logout",
+  "version": "Version: {}",
+  "home": "Home",
+  "search": "Search",
+  "library": "Library",
+  "premium": "Premium",
+  "personal": "Personal"
+
+}
