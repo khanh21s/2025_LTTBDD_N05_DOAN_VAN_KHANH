@@ -20,6 +20,12 @@
   "search": "Search",
   "library": "Library",
   "premium": "Premium",
-  "personal": "Personal"
+  "personal": "Personal",
+  "music": "Music",
+  "podcast": "Podcasts",
+  "music_today": "Today's Music",
+  "album_by_author": "Album by Author",
+  "view_all_songs": "View all songs",
+  "featured_podcasts": "Featured Podcasts"
 
 }

@@ -14,7 +14,7 @@ Future<void> main() async {
         Locale('en'), // tiếng Anh
         Locale('vi'), // tiếng Việt
       ],
-      path: 'assets/translations/', // 🔹 đường dẫn chứa file en.json và vi.json
+      path: 'assets/translations', // 🔹 đường dẫn chứa file en.json và vi.json
       fallbackLocale: const Locale('en'),
       child: const MyApp(),
     ),

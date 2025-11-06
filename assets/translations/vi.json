@@ -20,5 +20,12 @@
   "search": "Tìm kiếm",
   "library": "Thư viện",
   "premium": "Premium",
-  "personal": "Cá nhân"
+  "personal": "Cá nhân",
+  "music": "Nhạc",
+  "podcast": "Podcast",
+  "music_today": "Nhạc hôm nay",
+  "album_by_author": "Album theo tác giả",
+  "view_all_songs": "Xem tất cả bài hát",
+  "featured_podcasts": "Podcast nổi bật"
+
 }
