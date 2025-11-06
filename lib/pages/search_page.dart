@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:my_app/pages/category_detail_page.dart';
 
 class SearchPage extends StatefulWidget {
@@ -12,7 +13,7 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   String _query = "";
 
-  // Mock data
+  // 🔹 Danh sách thể loại có thể dịch được
   final List<String> categories = [
     "Pop",
     "Rock",
@@ -28,12 +29,13 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void dispose() {
-    _searchController.dispose(); // giải phóng controller khi widget bị hủy
+    _searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.locale; 
     final colors = [
       Colors.red,
       Colors.green,
@@ -53,9 +55,10 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Tìm kiếm',
-              style: TextStyle(
+            // 🔹 Tiêu đề trang
+            Text(
+              'search'.tr(), // "Tìm kiếm" / "Search"
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -63,7 +66,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             const SizedBox(height: 16),
 
-            // Search input
+            // 🔹 Ô nhập tìm kiếm
             TextField(
               controller: _searchController,
               onChanged: (value) {
@@ -73,7 +76,7 @@ class _SearchPageState extends State<SearchPage> {
               },
               style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
-                hintText: 'Nghệ sĩ, bài hát hoặc podcast',
+                hintText: tr('search_hint'), // đa ngôn ngữ
                 hintStyle: TextStyle(color: Colors.grey[600]),
                 prefixIcon: const Icon(Icons.search, color: Colors.black),
                 filled: true,
@@ -86,9 +89,10 @@ class _SearchPageState extends State<SearchPage> {
             ),
 
             const SizedBox(height: 20),
-            const Text(
-              'Duyệt tất cả',
-              style: TextStyle(
+            // 🔹 Tiêu đề "Duyệt tất cả"
+            Text(
+              'browse_all'.tr(), // "Duyệt tất cả" / "Browse all"
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -96,7 +100,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             const SizedBox(height: 16),
 
-            // Grid
+            // 🔹 Grid hiển thị các thể loại
             Expanded(
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -136,7 +140,6 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   );
                 },
-
               ),
             ),
           ],

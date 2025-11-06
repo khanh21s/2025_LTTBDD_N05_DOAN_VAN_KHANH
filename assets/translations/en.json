@@ -26,6 +26,9 @@
   "music_today": "Today's Music",
   "album_by_author": "Album by Author",
   "view_all_songs": "View all songs",
-  "featured_podcasts": "Featured Podcasts"
+  "featured_podcasts": "Featured Podcasts",
+    "search": "Search",
+  "search_hint": "Artist, song or podcast",
+  "browse_all": "Browse all"
 
 }

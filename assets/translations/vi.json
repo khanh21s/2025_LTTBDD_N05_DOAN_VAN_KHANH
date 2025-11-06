@@ -26,6 +26,9 @@
   "music_today": "Nhạc hôm nay",
   "album_by_author": "Album theo tác giả",
   "view_all_songs": "Xem tất cả bài hát",
-  "featured_podcasts": "Podcast nổi bật"
+  "featured_podcasts": "Podcast nổi bật",
+    "search": "Tìm kiếm",
+  "search_hint": "Nghệ sĩ, bài hát hoặc podcast",
+  "browse_all": "Duyệt tất cả"
 
 }
