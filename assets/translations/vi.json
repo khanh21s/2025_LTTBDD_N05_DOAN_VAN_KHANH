@@ -41,7 +41,17 @@
   "results_for": "Kết quả cho {}",
   "playlist": "Playlist",
   "artist": "Nghệ sĩ",
-  "album": "Album"
+  "album": "Album",
+  "premium_title": "Premium",
+  "upgrade_premium": "Nâng cấp lên Premium",
+  "unlimited_listen": "Nghe không giới hạn, không quảng cáo",
+  "view_plans": "Xem các gói",
+  "premium_benefits": "Lợi ích của Premium",
+  "download_music": "Tải nhạc xuống",
+  "no_ads": "Không quảng cáo",
+  "shuffle_play": "Phát theo thứ tự bất kỳ",
+  "high_quality_audio": "Chất lượng âm thanh cao"
+
 
 
 }

@@ -41,7 +41,17 @@
   "results_for": "Results for {}",
   "playlist": "Playlist",
   "artist": "Artist",
-  "album": "Album"
+  "album": "Album",
+  "premium_title": "Premium",
+  "upgrade_premium": "Upgrade to Premium",
+  "unlimited_listen": "Listen without limits, no ads",
+  "view_plans": "View Plans",
+  "premium_benefits": "Benefits of Premium",
+  "download_music": "Download music",
+  "no_ads": "No ads",
+  "shuffle_play": "Shuffle play",
+  "high_quality_audio": "High quality audio"
+
 
 
 }
