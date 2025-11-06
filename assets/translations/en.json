@@ -29,6 +29,19 @@
   "featured_podcasts": "Featured Podcasts",
     "search": "Search",
   "search_hint": "Artist, song or podcast",
-  "browse_all": "Browse all"
+  "browse_all": "Browse all",
+  "add_playlist": "Add Playlist",
+  "add_artist": "Add Artist",
+  "add_album": "Add Album",
+  "cancel": "Cancel",
+  "add": "Add",
+  "no_data": "No data available",
+  "search_in": "Search in {}",
+  "enter_to_search": "Enter to search in {}",
+  "results_for": "Results for {}",
+  "playlist": "Playlist",
+  "artist": "Artist",
+  "album": "Album"
+
 
 }

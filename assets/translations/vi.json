@@ -29,6 +29,19 @@
   "featured_podcasts": "Podcast nổi bật",
     "search": "Tìm kiếm",
   "search_hint": "Nghệ sĩ, bài hát hoặc podcast",
-  "browse_all": "Duyệt tất cả"
+  "browse_all": "Duyệt tất cả",
+  "add_playlist": "Thêm Playlist",
+  "add_artist": "Thêm Nghệ sĩ",
+  "add_album": "Thêm Album",
+  "cancel": "Hủy",
+  "add": "Thêm",
+  "no_data": "Không có dữ liệu",
+  "search_in": "Tìm kiếm trong {}",
+  "enter_to_search": "Nhập để tìm trong {}",
+  "results_for": "Kết quả cho {}",
+  "playlist": "Playlist",
+  "artist": "Nghệ sĩ",
+  "album": "Album"
+
 
 }
